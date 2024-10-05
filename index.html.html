@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Manager</title>
+    <style>
+        body{
+           
+        text-align: center;
+        height: 100vh;
+        align-content: center;
+
+        } 
+        input,select,button{
+            padding: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Personal Finance Manager</h1>
+
+    <!-- Input fields -->
+    <input id="item" type="text" placeholder="Item">
+    <input type="number" id="amount" placeholder="Amount">
+    <select name="Category" id="list">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
+    <button onclick="func()" id="btn">Add Entry</button>
+
+    <!-- Total amount display -->
+    <h2>Total Balance: <span id="total">0</span></h2>
+
+    <script>
+        
+        // Create the table
+        var table = document.createElement("table");
+        table.style.border = "2px solid black";
+        table.style.width="600px"
+        table.style.padding = "20px";
+        table.style.marginTop = "50px";
+        table.style.marginLeft="32%"
+        table.style.borderCollapse = "collapse"; // Makes the borders look better
+
+        // Create the header row
+        var tr = document.createElement("tr");
+        tr.style.backgroundColor = "gray";
+
+        var th1 = document.createElement("th");
+        th1.innerText = "Description";
+        th1.style.padding = "10px";
+
+        var th2 = document.createElement("th");
+        th2.innerText = "Amount";
+        th2.style.padding = "10px";
+
+        var th3 = document.createElement("th");
+        th3.innerText = "Type";
+        th3.style.padding = "10px";
+
+        var th4 = document.createElement("th");
+        th4.innerText = "Action";
+        th4.style.padding = "10px";
+
+        // Append headers to the table
+        tr.appendChild(th1);
+        tr.appendChild(th2);
+        tr.appendChild(th3);
+        tr.appendChild(th4);
+        table.appendChild(tr); // Add header row to the table
+
+        // Append the table to the body
+        document.body.appendChild(table);
+
+        // Initialize total balance
+        var totalBalance = 0;
+
+        // Function to add a new entry
+        function func() {
+            // Get the input values
+            var item = document.getElementById("item").value;
+            var amt = parseFloat(document.getElementById("amount").value);
+            var category = document.getElementById("list").value;
+
+            // Create a new row
+            var tr1 = document.createElement("tr");
+
+            // Create cells for the row
+            var td1 = document.createElement("td");
+            td1.innerText = item;
+            td1.style.padding = "10px";
+
+            var td2 = document.createElement("td");
+            td2.innerText = amt;
+            td2.style.padding = "10px";
+
+            var td3 = document.createElement("td");
+            td3.innerText = category;
+            td3.style.padding = "10px";
+
+            var td4 = document.createElement("td");
+            td4.style.padding = "10px";
+
+            // Create a delete button for the row
+            var deleteButton = document.createElement("button");
+            deleteButton.innerText = "Delete";
+            deleteButton.onclick = function () {
+                var deletedAmt = parseFloat(td2.innerText);
+                if (td3.innerText === "income") {
+                    totalBalance -= deletedAmt;
+                } else {
+                    totalBalance += deletedAmt;
+                }
+                document.getElementById("total").innerText = totalBalance;
+                table.deleteRow(tr1.rowIndex); // Deletes the row
+            };
+            td4.appendChild(deleteButton);
+
+            // Append cells to the new row
+            tr1.appendChild(td1);
+            tr1.appendChild(td2);
+            tr1.appendChild(td3);
+            tr1.appendChild(td4);
+
+            // Append the new row to the table
+            table.appendChild(tr1);
+
+            // Update the total balance based on the category (income/expense)
+            if (category === "income") {
+                totalBalance += amt;
+            } else if (category === "expense") {
+                totalBalance -= amt;
+            }
+
+            // Update the total balance display
+            document.getElementById("total").innerText = totalBalance;
+            
+
+            // Clear input fields
+            document.getElementById("item").value = "";
+            document.getElementById("amount").value = "";
+            document.getElementById("list").value = "income"; // Default back to income
+        }
+    </script>
+
+</body>
+</html>
